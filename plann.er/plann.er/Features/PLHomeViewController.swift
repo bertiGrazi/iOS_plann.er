@@ -12,7 +12,6 @@ class PLHomeViewController: UIViewController, UITextFieldDelegate {
     private lazy var homeContainer: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.enableView()
-        scrollView.showsVerticalScrollIndicator = true
         return scrollView
     }()
     
@@ -64,9 +63,43 @@ class PLHomeViewController: UIViewController, UITextFieldDelegate {
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(tappedContinueButton), for: .touchUpInside)
         button.enableView()
-        
         return button
     }()
+    
+    private lazy var termsTextView: UITextView = {
+        let textView = UITextView()
+        textView.isEditable = false
+        textView.isScrollEnabled = false
+        textView.backgroundColor = .clear
+        textView.textColor = .zinc400
+        textView.textAlignment = .center
+            
+        let fullText = "Ao planejar sua viagem pela plann.er você automaticamente concorda com nossos termos de uso e políticas de privacidade."
+        let attributedString = NSMutableAttributedString(string: fullText)
+            
+        let termsRange = (fullText as NSString).range(of: "termos de uso")
+        let andRange = (fullText as NSString).range(of: "e ")
+        let privacyRange = (fullText as NSString).range(of: "políticas de privacidade")
+            
+        attributedString.addAttribute(.foregroundColor, value: UIColor.zinc400, range: NSRange(location: 0, length: fullText.count))
+            
+        attributedString.addAttribute(.link, value: "https://example.com/terms", range: termsRange)
+        attributedString.addAttribute(.foregroundColor, value: UIColor.zinc300, range: termsRange)
+            
+        attributedString.addAttribute(.foregroundColor, value: UIColor.zinc400, range: andRange)
+            
+        attributedString.addAttribute(.link, value: "https://example.com/privacy", range: privacyRange)
+        attributedString.addAttribute(.foregroundColor, value: UIColor.zinc300, range: privacyRange)
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: fullText.count))
+        
+        textView.attributedText = attributedString
+        
+        textView.enableView()
+        return textView
+        }()
     
     @objc
     func tappedContinueButton() {
@@ -96,6 +129,7 @@ class PLHomeViewController: UIViewController, UITextFieldDelegate {
         homeContainer.addSubview(horizontalTextFieldStack)
         horizontalTextFieldStack.addSubview(whereTextField)
         horizontalTextFieldStack.addSubview(continueButton)
+        homeContainer.addSubview(termsTextView)
     }
     
     private func setupConstrains() {
@@ -128,6 +162,10 @@ class PLHomeViewController: UIViewController, UITextFieldDelegate {
             continueButton.trailingAnchor.constraint(equalTo: horizontalTextFieldStack.trailingAnchor, constant: -20),
             continueButton.widthAnchor.constraint(equalToConstant: 300),
             continueButton.heightAnchor.constraint(equalToConstant: 54),
+            
+            termsTextView.topAnchor.constraint(equalTo: horizontalTextFieldStack.bottomAnchor, constant: 12),
+            termsTextView.leadingAnchor.constraint(equalTo: homeContainer.leadingAnchor, constant: 20),
+            termsTextView.trailingAnchor.constraint(equalTo: homeContainer.trailingAnchor, constant: -20),
         ])
     }
     
