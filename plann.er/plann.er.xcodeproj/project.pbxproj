@@ -65,7 +65,7 @@
 				B131034F2C5400B000806E4E /* Components */,
 				B131034C2C53FDBF00806E4E /* Extensions */,
 				B13103492C53EF1A00806E4E /* Application */,
-				B131034A2C53EF3200806E4E /* Custom */,
+				B131034A2C53EF3200806E4E /* Features */,
 				B131034B2C53EF3F00806E4E /* Assets */,
 				B13103432C53EAC200806E4E /* Info.plist */,
 				B131033B2C53EAC100806E4E /* plann_er.xcdatamodeld */,
@@ -83,12 +83,12 @@
 			path = Application;
 			sourceTree = "<group>";
 		};
-		B131034A2C53EF3200806E4E /* Custom */ = {
+		B131034A2C53EF3200806E4E /* Features */ = {
 			isa = PBXGroup;
 			children = (
 				B13103362C53EAC000806E4E /* PLHomeViewController.swift */,
 			);
-			path = Custom;
+			path = Features;
 			sourceTree = "<group>";
 		};
 		B131034B2C53EF3F00806E4E /* Assets */ = {
