@@ -7,7 +7,15 @@
 
 import UIKit
 
-class PLHomeViewController: UIViewController {
+class PLHomeViewController: UIViewController, UITextFieldDelegate {
+    
+    private lazy var homeContainer: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.enableView()
+        scrollView.showsVerticalScrollIndicator = true
+        return scrollView
+    }()
+    
     private lazy var logoViewImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Logo")
@@ -23,7 +31,15 @@ class PLHomeViewController: UIViewController {
         alignment: .center
     )
     
-    private lazy var horizontalTextFieldStack = StackViewCuston(orientacion: .horizontal, spaceSize: 10)
+    private lazy var horizontalTextFieldStack: UIStackView = {
+        let stackView = UIStackView()
+        stackView.enableView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        return stackView
+    }()
     
     // horizontalTextFieldStack inside
     private lazy var whereTextField: UITextField = {
@@ -35,8 +51,10 @@ class PLHomeViewController: UIViewController {
         textField.attributedPlaceholder = NSAttributedString(string: "Para onde?", attributes: [NSAttributedString.Key.foregroundColor: UIColor.zinc400])
         textField.textColor = .zinc400
         textField.clipsToBounds = true
+        textField.delegate = self
         return textField
     }()
+    
     private lazy var continueButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .lime300
@@ -72,37 +90,50 @@ class PLHomeViewController: UIViewController {
     }
     
     private func setupView() {
-        view.addSubview(logoViewImage)
-        view.addSubview(mainLabel)
-        view.addSubview(horizontalTextFieldStack)
+        view.addSubview(homeContainer)
+        homeContainer.addSubview(logoViewImage)
+        homeContainer.addSubview(mainLabel)
+        homeContainer.addSubview(horizontalTextFieldStack)
         horizontalTextFieldStack.addSubview(whereTextField)
         horizontalTextFieldStack.addSubview(continueButton)
     }
     
     private func setupConstrains() {
         NSLayoutConstraint.activate([
-            logoViewImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoViewImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            homeContainer.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            homeContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            homeContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            homeContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
+            
+            logoViewImage.centerXAnchor.constraint(equalTo: homeContainer.centerXAnchor),
+            logoViewImage.centerYAnchor.constraint(equalTo: homeContainer.centerYAnchor),
             
             mainLabel.topAnchor.constraint(equalTo: logoViewImage.bottomAnchor, constant: 8),
-            mainLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            mainLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            mainLabel.leadingAnchor.constraint(equalTo: homeContainer.leadingAnchor, constant: 20),
+            mainLabel.trailingAnchor.constraint(equalTo: homeContainer.trailingAnchor, constant: -20),
             
             horizontalTextFieldStack.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 12),
-            horizontalTextFieldStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            horizontalTextFieldStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            horizontalTextFieldStack.widthAnchor.constraint(equalToConstant: 300),
-            horizontalTextFieldStack.heightAnchor.constraint(equalToConstant: 300),
-            
+            horizontalTextFieldStack.leadingAnchor.constraint(equalTo: homeContainer.leadingAnchor, constant: 20),
+            horizontalTextFieldStack.trailingAnchor.constraint(equalTo: homeContainer.trailingAnchor, constant: -20),
+            horizontalTextFieldStack.heightAnchor.constraint(equalToConstant: 140),
             
             whereTextField.topAnchor.constraint(equalTo: horizontalTextFieldStack.topAnchor, constant: 8),
             whereTextField.leadingAnchor.constraint(equalTo: horizontalTextFieldStack.leadingAnchor, constant: 20),
             whereTextField.trailingAnchor.constraint(equalTo: horizontalTextFieldStack.trailingAnchor, constant: -20),
+            whereTextField.widthAnchor.constraint(equalToConstant: 300),
+            whereTextField.heightAnchor.constraint(equalToConstant: 54),
             
             continueButton.topAnchor.constraint(equalTo: whereTextField.bottomAnchor, constant: 8),
             continueButton.leadingAnchor.constraint(equalTo: horizontalTextFieldStack.leadingAnchor, constant: 20),
             continueButton.trailingAnchor.constraint(equalTo: horizontalTextFieldStack.trailingAnchor, constant: -20),
+            continueButton.widthAnchor.constraint(equalToConstant: 300),
+            continueButton.heightAnchor.constraint(equalToConstant: 54),
         ])
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 
